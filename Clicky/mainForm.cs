@@ -78,19 +78,28 @@ namespace Clicky
                     string cmd = commands[i].Trim();
                     if (cmd.StartsWith("*"))
                     {
-                        // Sleep command
-                        int sleepVal = Int32.Parse(cmd.Substring(1, cmd.Length - 1));
-                        int sleepDone = 0;
-                        while (sleepDone < sleepVal)
+                        // Special commands
+                        if(cmd == "*end")
                         {
-                            if (thisWorker.CancellationPending) return;
-                            Thread.Sleep(sleepStep);
-                            sleepDone += sleepStep;
+                            // End loop
+                            return;
+                        } else
+                        {
+                            // Sleep
+                            int sleepVal = Int32.Parse(cmd.Substring(1, cmd.Length - 1));
+                            int sleepDone = 0;
+                            while (sleepDone < sleepVal)
+                            {
+                                if (thisWorker.CancellationPending) return;
+                                Thread.Sleep(sleepStep);
+                                sleepDone += sleepStep;
+                            }
                         }
+                        
                     }
                     else
                     {
-                        // Regular command
+                        // Regular commands
                         if (cmd.StartsWith("\\")) cmd = cmd.Substring(1, cmd.Length - 1);
                         SendKeys.SendWait(cmd);
                     }
