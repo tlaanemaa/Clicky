@@ -54,7 +54,6 @@ namespace Clicky
             runButton.Enabled = false;
             settingsButton.Enabled = false;
             stopButton.Enabled = true;
-            stopButton.Focus();
 
             commands = commandBox.Text.Split(new string[] { "\n" }, StringSplitOptions.None);
             keyWorker.RunWorkerAsync();
@@ -132,7 +131,6 @@ namespace Clicky
             stopButton.Enabled = false;
             runButton.Enabled = true;
             settingsButton.Enabled = true;
-            runButton.Focus();
         }
 
         private void keyChecker_Tick(object sender, EventArgs e)
