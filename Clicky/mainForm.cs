@@ -136,7 +136,7 @@ namespace Clicky
 
         private void keyChecker_Tick(object sender, EventArgs e)
         {
-            if (commandBox.Focused) return;
+            if (this.ContainsFocus) return;
             if (toggleKeyWait == 0)
             {
                 short keyState = GetAsyncKeyState(Properties.Settings.Default.toggleKey);
