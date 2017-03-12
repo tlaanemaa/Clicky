@@ -9,8 +9,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
-using System.Diagnostics;
-
 namespace Clicky
 {
     public partial class mainForm : Form
