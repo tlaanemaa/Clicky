@@ -19,6 +19,7 @@ namespace Clicky
         public string[] commands;
         private Boolean settingsSaved = true;
         private int toggleKeyWait = 0;
+        private settingsForm settingsFrm = new settingsForm();
 
         public mainForm()
         {
@@ -136,7 +137,7 @@ namespace Clicky
 
         private void keyChecker_Tick(object sender, EventArgs e)
         {
-            if (this.ContainsFocus) return;
+            if (this.ContainsFocus || settingsFrm.ContainsFocus) return;
             if (toggleKeyWait == 0)
             {
                 short keyState = GetAsyncKeyState(Properties.Settings.Default.toggleKey);
@@ -166,8 +167,7 @@ namespace Clicky
 
         private void settingsButton_Click(object sender, EventArgs e)
         {
-            settingsForm frm = new settingsForm();
-            frm.ShowDialog(this);
+            settingsFrm.ShowDialog(this);
         }
     }
 }
