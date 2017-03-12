@@ -34,7 +34,7 @@
     <StartupObject>Clicky.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Plush-48.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Plush-48.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -104,6 +104,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Plush-48.ico" />
+    <None Include="Resources\Plush-48.ico" />
+    <None Include="Resources\icon.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
