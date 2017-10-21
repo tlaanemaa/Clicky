@@ -16,10 +16,22 @@ namespace Clicky
         [DllImport("user32.dll")]
         public static extern short GetAsyncKeyState(int vKey);
 
+        [DllImport("user32.dll")]
+        public static extern int SetCursorPos(int x, int y);
+
+        [DllImport("user32.dll")]
+        public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
+
         public string[] commands;
         private Boolean settingsSaved = true;
         private int toggleKeyWait = 0;
         private settingsForm settingsFrm = new settingsForm();
+
+        //Mouse actions
+        private const int MOUSEEVENTF_LEFTDOWN = 0x02;
+        private const int MOUSEEVENTF_LEFTUP = 0x04;
+        private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
+        private const int MOUSEEVENTF_RIGHTUP = 0x10;
 
         public mainForm()
         {
@@ -81,7 +93,8 @@ namespace Clicky
                         {
                             // End loop
                             return;
-                        } else
+                        }
+                        else
                         {
                             // Sleep
                             int sleepVal = Int32.Parse(cmd.Substring(1, cmd.Length - 1));
@@ -166,6 +179,61 @@ namespace Clicky
         private void settingsButton_Click(object sender, EventArgs e)
         {
             settingsFrm.ShowDialog(this);
+        }
+
+        private void mouseMove(int x, int y)
+        {
+            SetCursorPos(x, y);
+        }
+
+        private void mouseAction(string action, string key = "left", int? x = null, int? y = null)
+        {
+            uint mouseAction;
+            uint xCoord;
+            uint yCoord;
+
+            // Decide which key and action we want to use
+            if (key == "left" && action == "down")
+            {
+                mouseAction = MOUSEEVENTF_LEFTDOWN;
+            }
+            else if (key == "left" && action == "up")
+            {
+                mouseAction = MOUSEEVENTF_LEFTUP;
+            }
+            else if (key == "right" && action == "down")
+            {
+                mouseAction = MOUSEEVENTF_RIGHTDOWN;
+            }
+            else if (key == "right" && action == "up")
+            {
+                mouseAction = MOUSEEVENTF_RIGHTUP;
+            }
+            else
+            {
+                // Invalid key or action, ignore
+                return;
+            }
+
+            // Get coordinates for mouse action
+            if (x == null)
+            {
+                xCoord = (uint)Cursor.Position.X;
+            } else
+            {
+                xCoord = (uint)x;
+            }
+
+            if (y == null)
+            {
+                yCoord = (uint)Cursor.Position.Y;
+            } else
+            {
+                yCoord = (uint)y;
+            }
+
+            // Perform mouse action
+            mouse_event(mouseAction, xCoord, yCoord, 0, 0);
         }
     }
 }
