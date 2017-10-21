@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
@@ -19,7 +20,7 @@ namespace Clicky
         [DllImport("user32.dll")]
         public static extern int SetCursorPos(int x, int y);
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
 
         public string[] commands;
@@ -88,16 +89,50 @@ namespace Clicky
                     string cmd = commands[i].Trim();
                     if (cmd.StartsWith("*"))
                     {
+                        // Split the command into parameters
+                        string[] paramArray = Regex.Split(cmd.ToLower(), @"\s+");
+
                         // Special commands
-                        if(cmd == "*end")
+                        if (paramArray[0] == "*end")
                         {
                             // End loop
                             return;
                         }
-                        else
+                        else if (paramArray[0] == "*mouse")
+                        {
+                            if (paramArray[1] == "move")
+                            {
+                                int xCoord = Int32.Parse(paramArray[2]);
+                                int yCoord = Int32.Parse(paramArray[3]);
+                                mouseMove(xCoord, yCoord);
+                            }
+                            else if (paramArray[1] == "key")
+                            {
+                                // Get the required parameters
+                                string key = paramArray[2];
+                                string action = paramArray[3];
+
+                                // Get mouse action X coordinate if it was provided
+                                int? xCoord = null;
+                                if (paramArray.Length > 4)
+                                {
+                                    xCoord = Int32.Parse(paramArray[4]);
+                                }
+
+                                int? yCoord = null;
+                                if (paramArray.Length > 5)
+                                {
+                                    yCoord = Int32.Parse(paramArray[5]);
+                                }
+
+                                // Run the mouse action
+                                mouseAction(key, action, xCoord, yCoord);
+                            }
+                        }
+                        else if (paramArray[0] == "*sleep")
                         {
                             // Sleep
-                            int sleepVal = Int32.Parse(cmd.Substring(1, cmd.Length - 1));
+                            int sleepVal = Int32.Parse(paramArray[1]);
                             int sleepDone = 0;
                             while (sleepDone < sleepVal)
                             {
@@ -186,7 +221,17 @@ namespace Clicky
             SetCursorPos(x, y);
         }
 
-        private void mouseAction(string action, string key = "left", int? x = null, int? y = null)
+        private int getMouseX()
+        {
+            return Cursor.Position.X;
+        }
+
+        private int getMouseY()
+        {
+            return Cursor.Position.Y;
+        }
+
+        private void mouseAction(string key, string action, int? x = null, int? y = null)
         {
             uint mouseAction;
             uint xCoord;
@@ -218,7 +263,7 @@ namespace Clicky
             // Get coordinates for mouse action
             if (x == null)
             {
-                xCoord = (uint)Cursor.Position.X;
+                xCoord = (uint)getMouseX();
             } else
             {
                 xCoord = (uint)x;
@@ -226,7 +271,7 @@ namespace Clicky
 
             if (y == null)
             {
-                yCoord = (uint)Cursor.Position.Y;
+                yCoord = (uint)getMouseY();
             } else
             {
                 yCoord = (uint)y;
@@ -234,6 +279,23 @@ namespace Clicky
 
             // Perform mouse action
             mouse_event(mouseAction, xCoord, yCoord, 0, 0);
+        }
+
+        private void mouseXYTimer_Tick(object sender, EventArgs e)
+        {
+            mouseXYLabel.Text = "Mouse X: " + getMouseX() + " Y: " + getMouseY();
+        }
+
+        private void mouseXYLabel_Click(object sender, EventArgs e)
+        {
+            if (mouseXYTimer.Enabled)
+            {
+                mouseXYTimer.Enabled = false;
+                mouseXYLabel.Text = "Click me to enable mouse position monitor...";
+            } else
+            {
+                mouseXYTimer.Enabled = true;
+            }
         }
     }
 }

@@ -37,6 +37,8 @@
             this.keyWorker = new System.ComponentModel.BackgroundWorker();
             this.keyChecker = new System.Windows.Forms.Timer(this.components);
             this.settingsButton = new System.Windows.Forms.Button();
+            this.mouseXYLabel = new System.Windows.Forms.Label();
+            this.mouseXYTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // commandBox
@@ -51,7 +53,7 @@
             this.commandBox.EnableAutoDragDrop = true;
             this.commandBox.Location = new System.Drawing.Point(12, 12);
             this.commandBox.Name = "commandBox";
-            this.commandBox.Size = new System.Drawing.Size(260, 208);
+            this.commandBox.Size = new System.Drawing.Size(260, 198);
             this.commandBox.TabIndex = 0;
             this.commandBox.Text = "";
             this.commandBox.TextChanged += new System.EventHandler(this.commandBox_TextChanged);
@@ -60,7 +62,7 @@
             // 
             this.runButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.runButton.Location = new System.Drawing.Point(12, 226);
+            this.runButton.Location = new System.Drawing.Point(12, 216);
             this.runButton.Name = "runButton";
             this.runButton.Size = new System.Drawing.Size(150, 23);
             this.runButton.TabIndex = 1;
@@ -72,7 +74,7 @@
             // 
             this.stopButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.stopButton.Enabled = false;
-            this.stopButton.Location = new System.Drawing.Point(168, 226);
+            this.stopButton.Location = new System.Drawing.Point(168, 216);
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(75, 23);
             this.stopButton.TabIndex = 2;
@@ -102,12 +104,30 @@
             this.settingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.settingsButton.BackgroundImage = global::Clicky.Properties.Resources.Settings23;
             this.settingsButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.settingsButton.Location = new System.Drawing.Point(249, 226);
+            this.settingsButton.Location = new System.Drawing.Point(249, 216);
             this.settingsButton.Name = "settingsButton";
             this.settingsButton.Size = new System.Drawing.Size(23, 23);
             this.settingsButton.TabIndex = 3;
             this.settingsButton.UseVisualStyleBackColor = true;
             this.settingsButton.Click += new System.EventHandler(this.settingsButton_Click);
+            // 
+            // mouseXYLabel
+            // 
+            this.mouseXYLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mouseXYLabel.AutoSize = true;
+            this.mouseXYLabel.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+            this.mouseXYLabel.ForeColor = System.Drawing.Color.DimGray;
+            this.mouseXYLabel.Location = new System.Drawing.Point(12, 242);
+            this.mouseXYLabel.Name = "mouseXYLabel";
+            this.mouseXYLabel.Size = new System.Drawing.Size(225, 14);
+            this.mouseXYLabel.TabIndex = 4;
+            this.mouseXYLabel.Text = "Click me to enable mouse position monitor...";
+            this.mouseXYLabel.Click += new System.EventHandler(this.mouseXYLabel_Click);
+            // 
+            // mouseXYTimer
+            // 
+            this.mouseXYTimer.Interval = 50;
+            this.mouseXYTimer.Tick += new System.EventHandler(this.mouseXYTimer_Tick);
             // 
             // mainForm
             // 
@@ -115,6 +135,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Controls.Add(this.mouseXYLabel);
             this.Controls.Add(this.settingsButton);
             this.Controls.Add(this.stopButton);
             this.Controls.Add(this.runButton);
@@ -129,6 +150,7 @@
             this.Load += new System.EventHandler(this.mainForm_Load);
             this.ResizeEnd += new System.EventHandler(this.mainForm_ResizeEnd);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -141,6 +163,8 @@
         private System.Windows.Forms.Timer settingsSaver;
         private System.ComponentModel.BackgroundWorker keyWorker;
         private System.Windows.Forms.Timer keyChecker;
+        private System.Windows.Forms.Label mouseXYLabel;
+        private System.Windows.Forms.Timer mouseXYTimer;
     }
 }
 
